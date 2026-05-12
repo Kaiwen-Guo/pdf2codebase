@@ -61,8 +61,8 @@ Generated Python project from an English software specification.
 ## Run
 
 ```bash
-PYTHONPATH=generated python main.py
-PYTHONPATH=generated python -m pytest -q tests/test_generated.py
+python main.py
+python -m pytest -q
 ```
 
 ## Generated Layout

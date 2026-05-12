@@ -1,10 +1,17 @@
 from __future__ import annotations
 
 from importlib import import_module
+from pathlib import Path
+import sys
 
 
 MODULE_NAME = "task_scheduler"
 PUBLIC_APIS = [{'name': 'schedule_tasks', 'kind': 'function', 'signature': 'schedule_tasks(tasks: list[str], dependencies: list[tuple[str, str]]) -> list[str]', 'description': 'Return a valid deterministic task execution order.'}]
+
+
+GENERATED_DIR = Path(__file__).resolve().parent / "generated"
+if str(GENERATED_DIR) not in sys.path:
+    sys.path.insert(0, str(GENERATED_DIR))
 
 
 def main() -> None:

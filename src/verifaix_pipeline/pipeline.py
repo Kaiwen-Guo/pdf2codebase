@@ -457,8 +457,8 @@ Generated Python project from an English software specification.
 ## Run
 
 ```bash
-PYTHONPATH=generated python main.py
-PYTHONPATH=generated python -m pytest -q tests/test_generated.py
+python main.py
+python -m pytest -q
 ```
 
 ## Generated Layout
@@ -496,10 +496,17 @@ pythonpath = ["generated"]
     main_py = f'''from __future__ import annotations
 
 from importlib import import_module
+from pathlib import Path
+import sys
 
 
 MODULE_NAME = "{project_spec.module_name}"
 PUBLIC_APIS = {apis_repr}
+
+
+GENERATED_DIR = Path(__file__).resolve().parent / "generated"
+if str(GENERATED_DIR) not in sys.path:
+    sys.path.insert(0, str(GENERATED_DIR))
 
 
 def main() -> None:

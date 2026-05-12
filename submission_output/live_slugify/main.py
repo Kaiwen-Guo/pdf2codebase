@@ -1,10 +1,17 @@
 from __future__ import annotations
 
 from importlib import import_module
+from pathlib import Path
+import sys
 
 
 MODULE_NAME = "slugify_utility"
 PUBLIC_APIS = [{'name': 'slugify', 'kind': 'function', 'signature': 'slugify(text: str) -> str', 'description': 'Converts human-readable text into a lowercase URL-safe slug string.'}]
+
+
+GENERATED_DIR = Path(__file__).resolve().parent / "generated"
+if str(GENERATED_DIR) not in sys.path:
+    sys.path.insert(0, str(GENERATED_DIR))
 
 
 def main() -> None:

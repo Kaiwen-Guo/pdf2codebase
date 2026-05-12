@@ -19,7 +19,7 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-If you do not install the package, prefix commands with `PYTHONPATH=src` as shown below.
+After installation, use the `verifaix` console command.
 
 PDF extraction uses the `pdftotext` command when available. On macOS:
 
@@ -36,10 +36,10 @@ export OPENAI_API_KEY=...
 No API key is required for the deterministic local demo.
 
 ```bash
-PYTHONPATH=src python -m verifaix_pipeline init-db --config config.local.toml
-PYTHONPATH=src python -m verifaix_pipeline run --pdf examples/scheduler.pdf --config config.local.toml
-PYTHONPATH=src python -m verifaix_pipeline delta --old-pdf examples/scheduler.pdf --new-pdf examples/scheduler_reverse.txt --config config.local.toml
-PYTHONPATH=src python -m verifaix_pipeline validate-run --artifact-dir artifacts/<run_id>
+verifaix init-db --config config.local.toml
+verifaix run --pdf examples/scheduler.pdf --config config.local.toml
+verifaix delta --old-pdf examples/scheduler.pdf --new-pdf examples/scheduler_reverse.txt --config config.local.toml
+verifaix validate-run --artifact-dir artifacts/<run_id>
 python -m pytest -q
 ```
 
@@ -47,14 +47,14 @@ For live LLM generation with deterministic fallback enabled, set `OPENAI_API_KEY
 
 ```bash
 export OPENAI_API_KEY=...
-PYTHONPATH=src python -m verifaix_pipeline run --pdf examples/scheduler.pdf --config config.example.toml
+verifaix run --pdf examples/scheduler.pdf --config config.example.toml
 ```
 
 For a strict live-LLM smoke test that fails if the LLM call fails, use:
 
 ```bash
 export OPENAI_API_KEY=...
-PYTHONPATH=src python -m verifaix_pipeline run --pdf examples/scheduler.pdf --config config.live.toml
+verifaix run --pdf examples/scheduler.pdf --config config.live.toml
 ```
 
 ## Architecture
@@ -85,7 +85,7 @@ verifaix validate-run --artifact-dir artifacts/<run_id>
 verifaix show-runs --db verifaix.local.db
 ```
 
-If the package is not installed, use `PYTHONPATH=src python -m verifaix_pipeline ...`.
+The supported local interface is the installed `verifaix` console command from `python -m pip install -e ".[dev]"`.
 
 ## Generated Codebase Location
 
@@ -111,9 +111,12 @@ For example, the checked assignment-PDF output can be run directly from the repo
 
 ```bash
 cd submission_output/live_scheduler
-PYTHONPATH=generated python main.py
-PYTHONPATH=generated python -m pytest -q tests/test_generated.py
-PYTHONPATH=generated python - <<'PY'
+python main.py
+python -m pytest -q
+python - <<'PY'
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path("generated").resolve()))
 from task_scheduler import schedule_tasks
 print(schedule_tasks(["b", "a", "c"], []))
 PY
@@ -123,9 +126,12 @@ The non-scheduler live demo is:
 
 ```bash
 cd submission_output/live_slugify
-PYTHONPATH=generated python main.py
-PYTHONPATH=generated python -m pytest -q tests/test_generated.py
-PYTHONPATH=generated python - <<'PY'
+python main.py
+python -m pytest -q
+python - <<'PY'
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path("generated").resolve()))
 from slugify_utility import slugify
 print(slugify(" Hello, World! "))
 PY
