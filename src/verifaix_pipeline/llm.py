@@ -25,6 +25,8 @@ class LLMClient:
             raise RuntimeError("LLM provider is disabled")
         if self.config.llm_provider == "openai":
             return self._openai_generate_text(prompt)
+        if self.config.llm_provider == "anthropic":
+            return self._anthropic_generate_text(prompt)
         raise ValueError(f"Unsupported LLM provider: {self.config.llm_provider}")
 
     def generate_json(self, prompt: str) -> dict[str, Any]:
@@ -82,6 +84,42 @@ class LLMClient:
             for content in item.get("content", []):
                 if content.get("type") in {"output_text", "text"}:
                     chunks.append(str(content.get("text", "")))
+        if chunks:
+            return "\n".join(chunks)
+        return json.dumps(raw)
+
+    def _anthropic_generate_text(self, prompt: str) -> str:
+        api_key = os.environ.get(self.config.api_key_env)
+        if not api_key:
+            raise RuntimeError(
+                f"Missing API key environment variable: {self.config.api_key_env}"
+            )
+
+        body = json.dumps(
+            {
+                "model": self.config.model_name,
+                "max_tokens": self.config.max_tokens,
+                "temperature": self.config.temperature,
+                "messages": [{"role": "user", "content": prompt}],
+            }
+        ).encode("utf-8")
+        http_request = request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=body,
+            method="POST",
+            headers={
+                "x-api-key": api_key,
+                "anthropic-version": "2023-06-01",
+                "Content-Type": "application/json",
+            },
+        )
+        with request.urlopen(http_request, timeout=120) as response:
+            raw = json.loads(response.read().decode("utf-8"))
+
+        chunks: list[str] = []
+        for item in raw.get("content", []):
+            if item.get("type") == "text":
+                chunks.append(str(item.get("text", "")))
         if chunks:
             return "\n".join(chunks)
         return json.dumps(raw)

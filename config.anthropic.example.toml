@@ -1,7 +1,7 @@
 [llm]
-llm_provider = "openai"
-model_name = "gpt-4.1-mini"
-api_key_env = "OPENAI_API_KEY"
+llm_provider = "anthropic"
+model_name = "claude-3-5-haiku-latest"
+api_key_env = "ANTHROPIC_API_KEY"
 temperature = 0.1
 max_tokens = 8192
 use_llm_for_testplan = true
@@ -9,9 +9,9 @@ use_llm_for_code = true
 use_llm_for_tests = true
 
 [storage]
-database_path = "verifaix.live.db"
+database_path = "verifaix.anthropic.db"
 artifacts_dir = "artifacts"
 
 [runtime]
 module_name = "generated_module"
-fallback_to_deterministic = false
+fallback_to_deterministic = true

@@ -15,7 +15,7 @@
   "requirements": [
     {
       "req_id": "REQ_1",
-      "description": "The function schedule_tasks must accept a parameter 'tasks' which is a list of unique task name strings.",
+      "description": "The function schedule_tasks must accept a parameter 'tasks' which is a list of unique task names (strings).",
       "category": "api",
       "source_sections": [
         "1.1"
@@ -23,7 +23,7 @@
     },
     {
       "req_id": "REQ_2",
-      "description": "The function schedule_tasks must accept a parameter 'dependencies' which is a list of pairs of strings representing dependency edges (before_task, after_task).",
+      "description": "The function schedule_tasks must accept a parameter 'dependencies' which is a list of pairs of strings representing dependency pairs (before_task, after_task).",
       "category": "api",
       "source_sections": [
         "1.1"
@@ -31,7 +31,7 @@
     },
     {
       "req_id": "REQ_3",
-      "description": "The function schedule_tasks returns a list of strings representing a valid ordering of all tasks.",
+      "description": "The function schedule_tasks must return a list of strings representing a valid ordering of all tasks.",
       "category": "api",
       "source_sections": [
         "1.1"
@@ -55,7 +55,7 @@
     },
     {
       "req_id": "REQ_6",
-      "description": "When multiple tasks are available to schedule, the lexicographically smallest task must be selected first to ensure deterministic output.",
+      "description": "The output ordering must be deterministic: when multiple tasks are available to schedule, the lexicographically smallest task is selected first.",
       "category": "behavior",
       "source_sections": [
         "1.2"
@@ -63,7 +63,7 @@
     },
     {
       "req_id": "REQ_7",
-      "description": "If the 'tasks' list contains duplicate task names, the function must raise a ValueError.",
+      "description": "If the 'tasks' list contains duplicate task names, schedule_tasks must raise a ValueError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -71,7 +71,7 @@
     },
     {
       "req_id": "REQ_8",
-      "description": "If any dependency refers to a task not present in the 'tasks' list, the function must raise a ValueError.",
+      "description": "If any dependency refers to a task not present in the 'tasks' list, schedule_tasks must raise a ValueError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -79,7 +79,7 @@
     },
     {
       "req_id": "REQ_9",
-      "description": "If a circular dependency exists among tasks, the function must raise a ValueError.",
+      "description": "If a circular dependency exists among tasks, schedule_tasks must raise a ValueError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -87,7 +87,7 @@
     },
     {
       "req_id": "REQ_10",
-      "description": "If the 'tasks' parameter is not a list, the function must raise a TypeError.",
+      "description": "If the 'tasks' parameter is not a list, schedule_tasks must raise a TypeError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -95,7 +95,7 @@
     },
     {
       "req_id": "REQ_11",
-      "description": "If the 'dependencies' parameter is not a list, the function must raise a TypeError.",
+      "description": "If the 'dependencies' parameter is not a list, schedule_tasks must raise a TypeError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -103,7 +103,7 @@
     },
     {
       "req_id": "REQ_12",
-      "description": "If any task name in 'tasks' is not a string, the function must raise a TypeError.",
+      "description": "If any task name in 'tasks' is not a string, schedule_tasks must raise a TypeError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -111,7 +111,7 @@
     },
     {
       "req_id": "REQ_13",
-      "description": "If any dependency is not a pair of strings, the function must raise a TypeError.",
+      "description": "If any dependency is not a pair of strings, schedule_tasks must raise a TypeError.",
       "category": "error",
       "source_sections": [
         "1.3"
@@ -119,7 +119,7 @@
     },
     {
       "req_id": "REQ_14",
-      "description": "If 'tasks' and 'dependencies' are both empty, the function must return an empty list.",
+      "description": "If 'tasks' and 'dependencies' are both empty, schedule_tasks must return an empty list.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -127,7 +127,7 @@
     },
     {
       "req_id": "REQ_15",
-      "description": "If there is a single task with no dependencies, the function must return a list containing only that task.",
+      "description": "If there is a single task with no dependencies, schedule_tasks must return a list containing only that task.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -135,7 +135,7 @@
     },
     {
       "req_id": "REQ_16",
-      "description": "If there are multiple tasks with no dependencies, the function must return them in lexicographic order.",
+      "description": "If there are multiple tasks with no dependencies, schedule_tasks must return them in lexicographic order.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -143,7 +143,7 @@
     },
     {
       "req_id": "REQ_17",
-      "description": "For a long dependency chain, the function must return tasks in dependency order.",
+      "description": "For a long dependency chain, schedule_tasks must return tasks in dependency order.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -151,7 +151,7 @@
     },
     {
       "req_id": "REQ_18",
-      "description": "For multiple independent chains, the function must produce a deterministic order using lexicographic availability.",
+      "description": "For multiple independent chains, schedule_tasks must produce a deterministic ordering based on lexicographic availability.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -159,7 +159,7 @@
     },
     {
       "req_id": "REQ_19",
-      "description": "For a diamond-shaped dependency graph, the function must return tasks so that downstream tasks appear after all their prerequisites.",
+      "description": "For a diamond-shaped dependency graph, schedule_tasks must return an ordering where downstream tasks appear after all their prerequisites.",
       "category": "boundary",
       "source_sections": [
         "1.4"
@@ -175,7 +175,7 @@
     },
     {
       "req_id": "REQ_21",
-      "description": "The function returns only the ordering of tasks and does not execute tasks or perform any file or external side effects.",
+      "description": "The function schedule_tasks returns only the ordering and does not execute tasks or perform any file or external side effects.",
       "category": "assumption",
       "source_sections": [
         "1.5"
@@ -183,15 +183,15 @@
     },
     {
       "req_id": "REQ_22",
-      "description": "The function must implement a standard topological sort algorithm.",
-      "category": "assumption",
+      "description": "The expected time complexity of schedule_tasks is O((N + E) log N), where N is the number of tasks and E is the number of dependencies.",
+      "category": "performance",
       "source_sections": [
         "1.5"
       ]
     },
     {
       "req_id": "REQ_23",
-      "description": "The function must run in O((N + E) log N) time and use O(N + E) space, where N is the number of tasks and E is the number of dependencies.",
+      "description": "The expected space complexity of schedule_tasks is O(N + E), where N is the number of tasks and E is the number of dependencies.",
       "category": "performance",
       "source_sections": [
         "1.5"

@@ -1,6 +1,6 @@
-D_1	Added	TP_6	Add TypeError if reverse parameter is not a bool
-D_2	Modified	TP_1	API adds optional reverse parameter controlling lexicographic tie-breaking
-D_3	Modified	TP_4	Ordering rule extended to select lex largest task first when reverse=True
-D_4	Added	TP_13	Ordering rule for reverse=True selects lexicographically largest available task first
-D_5	Added	TP_17	Multiple tasks with no dependencies return reverse lexicographic order when reverse=True
+D_1	Added	TP_1	Added optional reverse parameter to schedule_tasks controlling lexicographic tie-breaking order.
+D_2	Added	TP_6	Added behavior for reverse=True selecting lexicographically largest available task first.
+D_3	Added	TP_14	Added TypeError raised if reverse parameter is not a bool.
+D_4	Modified	TP_5	Modified lexicographic ordering behavior to apply only when reverse=False.
+D_5	Added	TP_18	Added boundary condition for multiple tasks with no dependencies and reverse=True returning reverse lexicographic order.
 Delta count: 5

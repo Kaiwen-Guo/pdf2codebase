@@ -75,6 +75,8 @@ The key design goal is auditability: the database and artifact directory preserv
 
 Prompting is layered. Shared artifact contracts live under `prompts/blueprints/`; task-specific LLM behavior lives under `prompts/skills/`. See [docs/prompt_layering.md](docs/prompt_layering.md).
 
+Assignment requirement coverage is mapped in [docs/requirements_coverage.md](docs/requirements_coverage.md).
+
 ## CLI
 
 ```bash
@@ -147,11 +149,12 @@ Delta does not convert a PDF into another PDF. It compares two versions of the d
 - `model_name`
 - `api_key_env`
 - `temperature`
+- `max_tokens`
 - `use_llm_for_testplan`
 - `use_llm_for_code`
 - `use_llm_for_tests`
 
-`config.local.toml` disables LLM calls and uses the deterministic scheduler fallback. That fallback is intentionally scoped to the sample problem; hidden PDFs should use the configured LLM path. `config.live.toml` disables fallback so live LLM failures are visible.
+`config.anthropic.example.toml` demonstrates the same interface for Anthropic. `config.local.toml` disables LLM calls and uses the deterministic scheduler fallback. That fallback is intentionally scoped to the sample problem; hidden PDFs should use the configured LLM path. `config.live.toml` disables fallback so live LLM failures are visible.
 
 ## Database Content
 
@@ -181,6 +184,7 @@ The full live run against `Problem_Description_Software_Coding.pdf` generated:
 - `task_scheduler.py`
 - `test_generated.py`
 - `test_plan.json`
+- `prompts.json`
 - `pytest_stdout.txt`
 - SQLite rows for descriptions, test-plan items, generated code/tests, execution results, and trace links
 
@@ -202,3 +206,5 @@ No live LLM calls are required for the local demo. The live path is implemented 
 
 - `prompts/blueprints/`
 - `prompts/skills/`
+
+The assignment implementation was built with OpenAI Codex as the coding agent. Live generation has been validated with OpenAI via `config.live.toml`; Anthropic is supported through the same configurable provider interface in `config.anthropic.example.toml`.

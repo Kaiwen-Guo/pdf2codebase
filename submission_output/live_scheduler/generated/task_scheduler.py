@@ -3,34 +3,38 @@ import heapq
 
 
 def schedule_tasks(tasks: List[str], dependencies: List[Tuple[str, str]]) -> List[str]:
-    # Validate types (REQ_10, REQ_11)
+    # Validate input types
     if not isinstance(tasks, list):
         raise TypeError("tasks must be a list")
     if not isinstance(dependencies, list):
         raise TypeError("dependencies must be a list")
 
-    # Validate tasks elements (REQ_12)
+    # Validate tasks elements
     for t in tasks:
         if not isinstance(t, str):
-            raise TypeError("all task names must be strings")
+            raise TypeError("all tasks must be strings")
 
-    # Validate tasks uniqueness (REQ_7)
+    # Validate uniqueness of tasks
     if len(set(tasks)) != len(tasks):
-        raise ValueError("tasks list contains duplicate task names")
+        raise ValueError("tasks list contains duplicates")
 
     task_set = set(tasks)
 
-    # Validate dependencies elements (REQ_13, REQ_8)
+    # Validate dependencies elements
     for dep in dependencies:
-        if (not isinstance(dep, tuple) and not isinstance(dep, list)) or len(dep) != 2:
+        if not (isinstance(dep, tuple) or isinstance(dep, list)) or len(dep) != 2:
             raise TypeError("each dependency must be a pair of strings")
         before, after = dep
         if not isinstance(before, str) or not isinstance(after, str):
-            raise TypeError("dependency elements must be strings")
+            raise TypeError("dependency pairs must contain strings")
         if before not in task_set or after not in task_set:
-            raise ValueError("dependency refers to unknown task")
+            raise ValueError("dependency references unknown task")
 
-    # Build graph and in-degree map
+    # Special case: empty inputs
+    if not tasks and not dependencies:
+        return []
+
+    # Build graph and in-degree count
     graph = {task: [] for task in tasks}
     in_degree = {task: 0 for task in tasks}
 
@@ -38,7 +42,7 @@ def schedule_tasks(tasks: List[str], dependencies: List[Tuple[str, str]]) -> Lis
         graph[before].append(after)
         in_degree[after] += 1
 
-    # Use a min-heap for lexicographically smallest available task (REQ_6)
+    # Use a min-heap for lexicographically smallest available task
     heap = [task for task in tasks if in_degree[task] == 0]
     heapq.heapify(heap)
 
@@ -52,7 +56,7 @@ def schedule_tasks(tasks: List[str], dependencies: List[Tuple[str, str]]) -> Lis
             if in_degree[neighbor] == 0:
                 heapq.heappush(heap, neighbor)
 
-    # Check for cycles (REQ_9)
+    # Check if all tasks are scheduled (detect cycle)
     if len(result) != len(tasks):
         raise ValueError("circular dependency detected")
 

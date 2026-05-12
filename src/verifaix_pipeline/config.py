@@ -11,6 +11,7 @@ class LLMConfig:
     model_name: str
     api_key_env: str
     temperature: float
+    max_tokens: int
     use_llm_for_testplan: bool
     use_llm_for_code: bool
     use_llm_for_tests: bool
@@ -53,7 +54,7 @@ def load_config(path: str | Path) -> AppConfig:
         artifacts_dir = base_dir / artifacts_dir
 
     provider = str(llm_raw.get("llm_provider", "none")).lower()
-    if provider not in {"none", "openai"}:
+    if provider not in {"none", "openai", "anthropic"}:
         raise ValueError(f"Unsupported llm_provider: {provider}")
 
     return AppConfig(
@@ -62,6 +63,7 @@ def load_config(path: str | Path) -> AppConfig:
             model_name=str(llm_raw.get("model_name", "")),
             api_key_env=str(llm_raw.get("api_key_env", "")),
             temperature=float(llm_raw.get("temperature", 0.0)),
+            max_tokens=int(llm_raw.get("max_tokens", 8192)),
             use_llm_for_testplan=bool(llm_raw.get("use_llm_for_testplan", False)),
             use_llm_for_code=bool(llm_raw.get("use_llm_for_code", False)),
             use_llm_for_tests=bool(llm_raw.get("use_llm_for_tests", False)),

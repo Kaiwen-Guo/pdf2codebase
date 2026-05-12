@@ -31,6 +31,38 @@ SAMPLE_PDF = ROOT / "Problem_Description_Software_Coding.pdf"
 REVERSE_TEXT = ROOT / "examples" / "scheduler_reverse.txt"
 
 
+def test_config_accepts_documented_llm_providers(tmp_path):
+    for provider, api_key_env in [
+        ("none", ""),
+        ("openai", "OPENAI_API_KEY"),
+        ("anthropic", "ANTHROPIC_API_KEY"),
+    ]:
+        config_path = tmp_path / f"{provider}.toml"
+        config_path.write_text(
+            f"""
+[llm]
+llm_provider = "{provider}"
+model_name = "test-model"
+api_key_env = "{api_key_env}"
+temperature = 0.1
+max_tokens = 2048
+use_llm_for_testplan = true
+use_llm_for_code = true
+use_llm_for_tests = true
+
+[storage]
+database_path = "{tmp_path / f'{provider}.db'}"
+artifacts_dir = "{tmp_path / provider}"
+
+[runtime]
+module_name = "generated_module"
+fallback_to_deterministic = true
+""",
+            encoding="utf-8",
+        )
+        assert load_config(config_path).llm.llm_provider == provider
+
+
 def test_extract_description_from_pdf():
     description = extract_description(SAMPLE_PDF)
     assert "schedule_tasks" in description.text
