@@ -73,7 +73,8 @@ def generate_test_plan(
     )
     if use_llm and llm_client.enabled:
         try:
-            return TestPlan.from_dict(llm_client.generate_json(prompt)), prompt
+            test_plan = TestPlan.from_dict(llm_client.generate_json(prompt))
+            return ensure_requirement_ids_covered(project_spec, test_plan), prompt
         except Exception as exc:
             if not fallback_to_deterministic:
                 raise
@@ -83,6 +84,49 @@ def generate_test_plan(
                 stacklevel=2,
             )
     return deterministic_test_plan(description_text), prompt
+
+
+def ensure_requirement_ids_covered(
+    project_spec: ProjectSpec,
+    test_plan: TestPlan,
+) -> TestPlan:
+    covered = {
+        req_id
+        for item in test_plan.items
+        for req_id in item.requirement_ids
+    }
+    missing = [
+        requirement
+        for requirement in project_spec.requirements
+        if requirement.req_id not in covered
+    ]
+    if not missing:
+        return test_plan
+
+    items = list(test_plan.items)
+    next_index = _next_tp_index(items)
+    for requirement in missing:
+        items.append(
+            TestPlanItem(
+                tp_id=f"TP_{next_index}",
+                description=requirement.description,
+                source_sections=requirement.source_sections,
+                expected_behavior=requirement.description,
+                category=requirement.category,
+                requirement_ids=[requirement.req_id],
+            )
+        )
+        next_index += 1
+    return TestPlan(items)
+
+
+def _next_tp_index(items: list[TestPlanItem]) -> int:
+    indexes: list[int] = []
+    for item in items:
+        match = re.search(r"(\d+)", item.tp_id)
+        if match:
+            indexes.append(int(match.group(1)))
+    return (max(indexes) + 1) if indexes else 1
 
 
 def generate_codebase(

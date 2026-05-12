@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tempfile
 from typing import Any
+from urllib.error import HTTPError
 from urllib import request
 
 from .models import Description
@@ -262,8 +263,11 @@ def _openai_visual_notes(
             "Content-Type": "application/json",
         },
     )
-    with request.urlopen(http_request, timeout=120) as response:
-        raw = json.loads(response.read().decode("utf-8"))
+    try:
+        with request.urlopen(http_request, timeout=120) as response:
+            raw = json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        raise RuntimeError(_format_http_error("OpenAI", exc)) from exc
     if "output_text" in raw:
         return str(raw["output_text"])
     chunks: list[str] = []
@@ -313,8 +317,11 @@ def _anthropic_visual_notes(
             "Content-Type": "application/json",
         },
     )
-    with request.urlopen(http_request, timeout=120) as response:
-        raw = json.loads(response.read().decode("utf-8"))
+    try:
+        with request.urlopen(http_request, timeout=120) as response:
+            raw = json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        raise RuntimeError(_format_http_error("Anthropic", exc)) from exc
     chunks = [
         str(item.get("text", ""))
         for item in raw.get("content", [])
@@ -330,3 +337,10 @@ def _api_key(api_key_env: str) -> str:
     if not api_key:
         raise RuntimeError(f"Missing API key environment variable: {api_key_env}")
     return api_key
+
+
+def _format_http_error(provider: str, exc: HTTPError) -> str:
+    body = exc.read().decode("utf-8", errors="replace")
+    if len(body) > 1000:
+        body = body[:1000] + "..."
+    return f"{provider} API request failed with HTTP {exc.code}: {body}"

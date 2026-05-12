@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError
 from urllib import request
 
 from .config import LLMConfig
@@ -74,8 +75,11 @@ class LLMClient:
                 "Content-Type": "application/json",
             },
         )
-        with request.urlopen(http_request, timeout=120) as response:
-            raw = json.loads(response.read().decode("utf-8"))
+        try:
+            with request.urlopen(http_request, timeout=120) as response:
+                raw = json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            raise RuntimeError(_format_http_error("OpenAI", exc)) from exc
         if "output_text" in raw:
             return str(raw["output_text"])
 
@@ -113,8 +117,11 @@ class LLMClient:
                 "Content-Type": "application/json",
             },
         )
-        with request.urlopen(http_request, timeout=120) as response:
-            raw = json.loads(response.read().decode("utf-8"))
+        try:
+            with request.urlopen(http_request, timeout=120) as response:
+                raw = json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            raise RuntimeError(_format_http_error("Anthropic", exc)) from exc
 
         chunks: list[str] = []
         for item in raw.get("content", []):
@@ -123,6 +130,13 @@ class LLMClient:
         if chunks:
             return "\n".join(chunks)
         return json.dumps(raw)
+
+
+def _format_http_error(provider: str, exc: HTTPError) -> str:
+    body = exc.read().decode("utf-8", errors="replace")
+    if len(body) > 1000:
+        body = body[:1000] + "..."
+    return f"{provider} API request failed with HTTP {exc.code}: {body}"
 
 
 def load_prompt(name: str, **values: str) -> str:

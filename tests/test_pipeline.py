@@ -12,6 +12,7 @@ from verifaix_pipeline.generators import (
     clean_deltas,
     compare_test_plans,
     deterministic_test_plan,
+    ensure_requirement_ids_covered,
     filter_deltas_against_descriptions,
 )
 from verifaix_pipeline.llm import compose_prompt
@@ -148,6 +149,34 @@ def test_generated_artifact_validators_catch_bad_outputs():
         assert "TP_2" in str(exc)
     else:
         raise AssertionError("missing TP coverage was not detected")
+
+
+def test_missing_requirement_ids_are_promoted_to_plan_items():
+    spec = ProjectSpec(
+        project_name="Example",
+        module_name="example",
+        public_api=[PublicAPI("run", "function", "run() -> None", "run", ["1.1"])],
+        requirements=[
+            Requirement("REQ_1", "first behavior", "behavior", ["1.2"]),
+            Requirement("REQ_2", "second behavior", "behavior", ["1.2"]),
+        ],
+        constraints={},
+    )
+    plan = PlanModel(
+        [
+            PlanItemModel(
+                "TP_1",
+                "first behavior",
+                ["1.2"],
+                "first behavior",
+                "behavior",
+                ["REQ_1"],
+            )
+        ]
+    )
+    completed = ensure_requirement_ids_covered(spec, plan)
+    assert [item.tp_id for item in completed.items] == ["TP_1", "TP_2"]
+    assert completed.items[-1].requirement_ids == ["REQ_2"]
 
 
 def test_plan_validator_requires_categories_from_description():

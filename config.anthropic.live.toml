@@ -9,7 +9,7 @@ use_llm_for_code = true
 use_llm_for_tests = true
 
 [storage]
-database_path = "verifaix.anthropic.db"
+database_path = "verifaix.anthropic.live.db"
 artifacts_dir = "artifacts"
 
 [extraction]
@@ -24,4 +24,4 @@ vision_dpi = 150
 
 [runtime]
 module_name = "generated_module"
-fallback_to_deterministic = true
+fallback_to_deterministic = false
