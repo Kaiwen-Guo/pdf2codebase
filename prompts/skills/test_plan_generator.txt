@@ -1,0 +1,16 @@
+Skill: Requirement-to-test-plan generation.
+
+Task:
+Read the English software-module description and project spec, then produce the test-plan JSON artifact.
+
+Priorities:
+- Turn prose requirements into executable, independently testable behaviors.
+- Include the function/module API surface.
+- Include documented errors and boundary cases.
+- Do not overfit to examples if a more general rule is stated.
+
+Description:
+{{description_text}}
+
+Project spec JSON:
+{{project_spec_json}}

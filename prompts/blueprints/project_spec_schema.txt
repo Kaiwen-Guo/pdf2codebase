@@ -1,0 +1,47 @@
+Project spec artifact schema:
+{
+  "project_name": "short human-readable project name",
+  "module_name": "safe_snake_case_python_module_name",
+  "public_api": [
+    {
+      "name": "function_or_class_name",
+      "kind": "function|class",
+      "signature": "callable signature from the description",
+      "description": "what this API does",
+      "source_sections": ["1.1"]
+    }
+  ],
+  "requirements": [
+    {
+      "req_id": "REQ_1",
+      "description": "testable requirement",
+      "category": "api|behavior|error|boundary|assumption|performance|side_effect",
+      "source_sections": ["1.2"]
+    }
+  ],
+  "constraints": {
+    "language": "python",
+    "allowed_dependencies": ["stdlib"],
+    "forbidden_side_effects": ["network", "filesystem", "process"]
+  }
+}
+
+Project spec rules:
+- Return only valid JSON matching this schema.
+- Infer a safe snake_case module name from the documented public API.
+- Include all documented public functions/classes.
+- Preserve source-section references where available.
+- Requirements must be atomic enough to map to tests.
+- Do not omit explicit API, error, boundary, assumption, or performance requirements.
+- Public API entries describe callable/class surfaces; requirements describe testable obligations.
+- Requirements should not bundle multiple independent behaviors unless they cannot be tested separately.
+- Use categories consistently:
+  - api: callable/class availability, signature, accepted parameters, return type.
+  - behavior: normal functional behavior.
+  - error: documented exceptions and invalid inputs.
+  - boundary: empty, minimal, maximal, degenerate, or named boundary cases.
+  - assumption: stated non-functional assumptions and side-effect constraints.
+  - performance: documented complexity or scale expectations.
+  - side_effect: explicit allowed or forbidden external effects.
+- If a section gives a table of rows, prefer one requirement per row.
+- If complexity is stated, include a performance requirement even if it is difficult to fully test.

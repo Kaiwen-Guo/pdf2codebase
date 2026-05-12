@@ -1,0 +1,11 @@
+Traceability rules:
+- Preserve source-section references wherever possible.
+- Keep test-plan IDs visible in generated tests.
+- Align generated tests to test-plan items, not incidental code structure.
+- Outputs should make it possible to explain which PDF section caused each test.
+- Preserve requirement IDs from project spec into test-plan requirement_ids.
+- Keep TP IDs in generated test function names and docstrings.
+- Do not create orphan tests that cannot be mapped back to a TP ID.
+- Do not create TP items that cannot be mapped back to a requirement or source section unless the description truly lacks sections.
+- For generated code, use comments sparingly to mark non-obvious requirement-driven logic.
+- Traceability is more important than brevity when a requirement could otherwise be lost.

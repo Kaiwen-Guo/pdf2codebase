@@ -1,0 +1,25 @@
+from __future__ import annotations
+
+from importlib import import_module
+
+
+MODULE_NAME = "task_scheduler"
+PUBLIC_APIS = [{'name': 'schedule_tasks', 'kind': 'function', 'signature': 'schedule_tasks(tasks: list[str], dependencies: list[tuple[str, str]]) -> list[str]', 'description': 'Return a valid deterministic task execution order.'}]
+
+
+def main() -> None:
+    module = import_module(MODULE_NAME)
+    print(f"Generated project: Task Scheduler")
+    print(f"Entry module: {MODULE_NAME}")
+    print("Public API:")
+    for api in PUBLIC_APIS:
+        name = api["name"]
+        signature = api["signature"]
+        description = api.get("description") or name
+        available = hasattr(module, name)
+        status = "available" if available else "missing"
+        print(f"- {signature} [{status}]: {description}")
+
+
+if __name__ == "__main__":
+    main()

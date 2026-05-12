@@ -1,0 +1,28 @@
+Delta artifact schema:
+{
+  "deltas": [
+    {
+      "delta_id": "D_1",
+      "change_type": "Added|Removed|Modified",
+      "tp_id": "TP_1",
+      "description": "short human-readable change"
+    }
+  ]
+}
+
+Delta rules:
+- Do not report unchanged requirements.
+- Treat wording-only changes as unchanged.
+- Treat renumbering, reordered items, split items, merged items, and different test-plan granularity as unchanged.
+- Preserve old TP IDs for Modified and Removed items when possible.
+- Use the new TP ID for Added items.
+- A Modified item means an existing requirement changed in behavior, input, output, error handling, or scope.
+- An Added item means a genuinely new requirement or testable behavior appears in the new plan.
+- A Removed item means a requirement from the old plan is no longer present.
+- Prefer a short, high-signal delta list over exhaustive wording comparisons.
+- Do not use the same TP ID in more than one delta.
+- Do not report the same semantic change twice.
+- Deltas should be meaningful to someone deciding which tests/code need updates.
+- Do not report changes caused only by a model producing different IDs or wording.
+- If a new feature changes an existing default behavior and adds a new mode, report both the existing behavior modification and the new mode.
+- Use descriptions that name the changed input, output, exception, or constraint.

@@ -1,0 +1,10 @@
+Response discipline:
+- Return only the requested artifact and nothing else.
+- Do not include markdown fences.
+- Do not include headings, notes, explanations, apologies, or commentary.
+- If the requested artifact is JSON, it must parse with json.loads without cleanup.
+- If the requested artifact is Python, it must parse with ast.parse.
+- Use concise names and descriptions, but do not omit required fields.
+- Keep IDs stable, sequential, and human-readable.
+- Use ASCII-compatible source unless the input explicitly requires otherwise.
+- Prefer deterministic ordering of arrays: public API order, then requirement/test-plan order by source section.

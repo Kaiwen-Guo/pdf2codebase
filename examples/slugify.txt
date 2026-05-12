@@ -1,0 +1,37 @@
+Problem Description: Slugify Utility
+
+1. Overview
+A Python module that converts human-readable text into URL-safe slugs.
+The module returns a normalized string and does not read files, write files,
+make network requests, or execute external commands.
+
+1.1 API
+slugify(text: str) -> str
+
+Parameter: text, str, required, input text to normalize.
+Returns: str - a lowercase URL-safe slug.
+
+1.2 Formatting Rules
+All alphabetic characters are lowercased.
+Leading and trailing whitespace is ignored.
+One or more whitespace characters are replaced with a single hyphen.
+Punctuation characters are removed.
+Existing hyphens are preserved.
+Multiple adjacent hyphens collapse to a single hyphen.
+
+Example:
+slugify(" Hello, World! ") returns "hello-world".
+
+1.3 Error Handling
+TypeError: text is not a string.
+
+1.4 Boundary Conditions
+Empty string returns empty string.
+String containing only whitespace returns empty string.
+String containing only punctuation returns empty string.
+Already slugified text returns the same text.
+
+1.5 Assumptions
+ASCII handling is sufficient.
+The function returns a string only and has no side effects.
+Expected complexity: O(N) time, O(N) space.

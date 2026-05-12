@@ -1,0 +1,13 @@
+Generated pytest contract:
+- Return only Python source code.
+- Import from module name: {{module_name}}
+- Each test function name must include its TP ID, e.g. test_tp_9_empty_inputs.
+- Each test docstring must begin with the TP ID, e.g. """TP_9: ..."""
+- Cover every test-plan item that can be executed.
+- Assert observable behavior, not implementation details.
+- Tests must be deterministic and fast.
+- Avoid sleeps, randomness, real filesystem/network/process effects, or dependence on wall-clock time.
+- Use pytest.raises for documented exceptions.
+- For non-executable assumptions, write the smallest meaningful behavioral or monkeypatch-based test.
+- Do not skip tests unless the test-plan item is genuinely non-executable, and explain that in the docstring.
+- Prefer one TP ID per test function when possible.

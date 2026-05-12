@@ -1,0 +1,14 @@
+Generated Python module contract:
+- Return only Python source code.
+- The module must be importable.
+- Match the public API specified in the description.
+- Raise the documented exception types.
+- Keep behavior deterministic.
+- Do not perform file, process, or network I/O unless explicitly required by the description.
+- Prefer standard-library implementations.
+- Do not run work at import time beyond defining constants/functions/classes.
+- Do not print, log, mutate external state, read environment variables, or depend on current time unless explicitly required.
+- Validate documented invalid inputs before core processing.
+- Keep exception behavior narrow: documented invalid inputs should raise the documented exception type.
+- Prefer clear control flow and small helpers over clever one-liners.
+- For multiple public APIs, avoid circular imports and keep shared helpers private.

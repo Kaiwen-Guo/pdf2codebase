@@ -1,0 +1,6 @@
+D_1	Modified	TP_8	Ordering honors reverse parameter when choosing available tasks
+D_2	Added	TP_21	Accepts optional reverse parameter
+D_3	Added	TP_22	Default reverse is False
+D_4	Added	TP_23	reverse=False selects smallest available task first
+D_5	Added	TP_24	reverse=True selects largest available task first
+Delta count: 5

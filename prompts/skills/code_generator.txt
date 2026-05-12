@@ -1,0 +1,16 @@
+Skill: Test-plan-guided Python implementation.
+
+Task:
+Generate the Python module implementation from the description and structured test plan.
+
+Priorities:
+- Implement the documented API and behavior completely.
+- Use the test plan as coverage guidance, not as the only source of truth.
+- Validate inputs before running core logic.
+- Keep code simple enough to inspect in an interview.
+
+Description:
+{{description_text}}
+
+Test plan JSON:
+{{test_plan_json}}

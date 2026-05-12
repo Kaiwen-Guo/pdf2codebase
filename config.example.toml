@@ -1,0 +1,16 @@
+[llm]
+llm_provider = "openai"
+model_name = "gpt-4.1-mini"
+api_key_env = "OPENAI_API_KEY"
+temperature = 0.1
+use_llm_for_testplan = true
+use_llm_for_code = true
+use_llm_for_tests = true
+
+[storage]
+database_path = "verifaix.db"
+artifacts_dir = "artifacts"
+
+[runtime]
+module_name = "generated_module"
+fallback_to_deterministic = true

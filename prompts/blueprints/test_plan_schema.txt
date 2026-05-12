@@ -1,0 +1,31 @@
+Test-plan artifact schema:
+{
+  "items": [
+    {
+      "tp_id": "TP_1",
+      "description": "short testable requirement",
+      "requirement_ids": ["REQ_1"],
+      "source_sections": ["1.1"],
+      "expected_behavior": "observable expected behavior",
+      "category": "api|behavior|error|boundary|assumption|performance|side_effect"
+    }
+  ]
+}
+
+Test-plan rules:
+- Include API, normal behavior, boundary cases, error handling, and stated assumptions.
+- Use stable sequential IDs: TP_1, TP_2, ...
+- Source sections must reference section labels from the description when available.
+- Each item must describe one testable behavior.
+- Each item should include requirement_ids linking back to project spec requirements.
+- Include explicit API items for callable/module exposure, accepted parameters, and return type when documented.
+- Do not merge separate error-handling rows into one item.
+- Do not merge separate boundary-condition rows into one item.
+- Include each stated assumption as a testable or inspectable item when possible.
+- Prefer complete coverage over a short plan.
+- Test-plan items should be written so a test engineer can implement them without rereading the whole PDF.
+- expected_behavior must be observable from public API calls whenever possible.
+- Do not use vague descriptions such as "works correctly" without concrete behavior.
+- Avoid duplicate test-plan items that differ only in wording.
+- Use the same category vocabulary as project spec requirements.
+- If complexity is stated, include a performance test-plan item even if the generated test can only be heuristic.

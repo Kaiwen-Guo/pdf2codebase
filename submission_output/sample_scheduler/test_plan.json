@@ -1,0 +1,247 @@
+{
+  "items": [
+    {
+      "tp_id": "TP_1",
+      "description": "Module exposes callable schedule_tasks",
+      "source_sections": [
+        "1.1"
+      ],
+      "expected_behavior": "schedule_tasks can be imported and called",
+      "category": "api",
+      "requirement_ids": [
+        "REQ_1"
+      ]
+    },
+    {
+      "tp_id": "TP_2",
+      "description": "Accepts tasks and dependencies inputs",
+      "source_sections": [
+        "1.1"
+      ],
+      "expected_behavior": "Function accepts tasks and dependency pairs",
+      "category": "api",
+      "requirement_ids": [
+        "REQ_2"
+      ]
+    },
+    {
+      "tp_id": "TP_3",
+      "description": "Returns list of task names",
+      "source_sections": [
+        "1.1"
+      ],
+      "expected_behavior": "Return value is a list",
+      "category": "api",
+      "requirement_ids": [
+        "REQ_3"
+      ]
+    },
+    {
+      "tp_id": "TP_4",
+      "description": "Every task appears exactly once",
+      "source_sections": [
+        "1.2"
+      ],
+      "expected_behavior": "Output contains each input task exactly once",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_4"
+      ]
+    },
+    {
+      "tp_id": "TP_5",
+      "description": "Dependencies are respected in order",
+      "source_sections": [
+        "1.2"
+      ],
+      "expected_behavior": "Every before task appears before its after task",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_5"
+      ]
+    },
+    {
+      "tp_id": "TP_6",
+      "description": "Linear chain scheduled correctly",
+      "source_sections": [
+        "1.1",
+        "1.4"
+      ],
+      "expected_behavior": "Long dependency chains are ordered correctly",
+      "category": "boundary",
+      "requirement_ids": [
+        "REQ_6"
+      ]
+    },
+    {
+      "tp_id": "TP_7",
+      "description": "No dependencies produce lexicographic order",
+      "source_sections": [
+        "1.2",
+        "1.4"
+      ],
+      "expected_behavior": "Independent tasks are sorted lexicographically",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_7"
+      ]
+    },
+    {
+      "tp_id": "TP_8",
+      "description": "Smallest available task is selected first",
+      "source_sections": [
+        "1.2",
+        "1.5"
+      ],
+      "expected_behavior": "Among ready tasks, the smallest task name is selected first",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_8"
+      ]
+    },
+    {
+      "tp_id": "TP_9",
+      "description": "Empty inputs return empty list",
+      "source_sections": [
+        "1.4"
+      ],
+      "expected_behavior": "Empty tasks and dependencies return []",
+      "category": "boundary",
+      "requirement_ids": [
+        "REQ_9"
+      ]
+    },
+    {
+      "tp_id": "TP_10",
+      "description": "Single task returns single-element list",
+      "source_sections": [
+        "1.4"
+      ],
+      "expected_behavior": "A single task is returned as a one-item list",
+      "category": "boundary",
+      "requirement_ids": [
+        "REQ_10"
+      ]
+    },
+    {
+      "tp_id": "TP_11",
+      "description": "Independent chains use deterministic order",
+      "source_sections": [
+        "1.4"
+      ],
+      "expected_behavior": "Multiple chains are interleaved by lexicographic availability",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_11"
+      ]
+    },
+    {
+      "tp_id": "TP_12",
+      "description": "Diamond graph handled correctly",
+      "source_sections": [
+        "1.4"
+      ],
+      "expected_behavior": "Downstream task appears after all prerequisites",
+      "category": "behavior",
+      "requirement_ids": [
+        "REQ_12"
+      ]
+    },
+    {
+      "tp_id": "TP_13",
+      "description": "Duplicate tasks raise ValueError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "Duplicate task names are rejected",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_13"
+      ]
+    },
+    {
+      "tp_id": "TP_14",
+      "description": "Unknown dependency task raises ValueError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "Dependencies referencing missing tasks are rejected",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_14"
+      ]
+    },
+    {
+      "tp_id": "TP_15",
+      "description": "Circular dependency raises ValueError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "Cycles are rejected",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_15"
+      ]
+    },
+    {
+      "tp_id": "TP_16",
+      "description": "Non-list tasks raises TypeError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "tasks must be a list",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_16"
+      ]
+    },
+    {
+      "tp_id": "TP_17",
+      "description": "Non-list dependencies raises TypeError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "dependencies must be a list",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_17"
+      ]
+    },
+    {
+      "tp_id": "TP_18",
+      "description": "Non-string task name raises TypeError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "task names must be strings",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_18"
+      ]
+    },
+    {
+      "tp_id": "TP_19",
+      "description": "Invalid dependency pair raises TypeError",
+      "source_sections": [
+        "1.3"
+      ],
+      "expected_behavior": "dependencies must be pairs of strings",
+      "category": "error",
+      "requirement_ids": [
+        "REQ_19"
+      ]
+    },
+    {
+      "tp_id": "TP_20",
+      "description": "Task names are case-sensitive",
+      "source_sections": [
+        "1.5"
+      ],
+      "expected_behavior": "Distinct case variants are separate tasks",
+      "category": "assumption",
+      "requirement_ids": [
+        "REQ_20"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[llm]
+llm_provider = "none"
+model_name = ""
+api_key_env = ""
+temperature = 0.0
+use_llm_for_testplan = false
+use_llm_for_code = false
+use_llm_for_tests = false
+
+[storage]
+database_path = "verifaix.local.db"
+artifacts_dir = "artifacts"
+
+[runtime]
+module_name = "generated_module"
+fallback_to_deterministic = true

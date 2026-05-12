@@ -1,0 +1,52 @@
+Problem Description: Task Scheduler with Dependencies
+
+1. Overview
+A Python module that computes a valid execution order for tasks with dependencies. Each task is identified by a unique string. A dependency (A, B) means A must complete before B begins. The module returns an ordered list of tasks such that every task appears after all of its dependencies.
+
+1.1 API
+schedule_tasks(tasks: list[str], dependencies: list[tuple[str, str]], reverse: bool = False) -> list[str]
+
+Parameter: tasks, list[str], required, list of unique task names.
+Parameter: dependencies, list[tuple[str, str]], required, dependency pairs (before_task, after_task).
+Parameter: reverse, bool, optional, controls deterministic tie-breaking.
+
+Returns: list[str] - a valid ordering of all tasks.
+
+1.2 Ordering Rules
+Every task in tasks appears exactly once in the returned execution order.
+For every dependency pair (A, B), A appears before B in the output.
+Deterministic output: when multiple tasks are available and reverse=False, the lexicographically smallest is selected first.
+When multiple tasks are available and reverse=True, the lexicographically largest available task is selected first.
+
+1.3 Error Handling
+ValueError: Duplicate task names.
+ValueError: Dependency refers to unknown task.
+ValueError: Circular dependency exists.
+TypeError: tasks is not a list.
+TypeError: dependencies is not a list.
+TypeError: Task name is not a string.
+TypeError: Dependency is not a pair of strings.
+TypeError: reverse is not a bool.
+
+1.4 Boundary Conditions
+Empty tasks and dependencies return [].
+Single task, no dependencies returns [task].
+Multiple tasks, no dependencies returns lexicographic order when reverse=False.
+Multiple tasks, no dependencies returns reverse lexicographic order when reverse=True.
+Long dependency chains preserve dependency order.
+Multiple independent chains are deterministic via lexicographic availability.
+Diamond-shaped graphs place downstream tasks after all prerequisites.
+
+1.5 Assumptions
+Standard topological sort is acceptable.
+Task names are case-sensitive.
+Function returns ordering only - does not execute tasks or touch files.
+Expected complexity: O((N + E) log N) time, O(N + E) space.
+
+4. Updated Description
+The function gains an optional reverse parameter:
+
+schedule_tasks(tasks, dependencies, reverse=False)
+
+reverse=False: lexicographically smallest available task first by default.
+reverse=True: lexicographically largest available task first.
