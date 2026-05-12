@@ -4,7 +4,9 @@ Source document: `Problem  -- Software Generation and Testing Automation.docx`.
 
 ## Input Scope
 
-The assignment asks for a Python system that reads an English software-module description from a PDF. It does not ask for OCR, image-to-text extraction, image-to-Word extraction, or Word-document parsing as part of the pipeline. The `.docx` file is the assignment instructions; the module description input is a PDF such as `Problem_Description_Software_Coding.pdf`.
+The assignment asks for a Python system that reads an English software-module description from a PDF. The `.docx` file is the assignment instructions; the module description input is a PDF such as `Problem_Description_Software_Coding.pdf`.
+
+Native text extraction is the default path. The implementation also supports scanned/image-only PDFs through optional OCR, and diagram-heavy PDFs through an opt-in vision-summary layer for rendered pages. The assignment does not ask for image-to-Word conversion or Word-document parsing as part of the pipeline.
 
 ## Deliverables
 
@@ -44,9 +46,19 @@ The assignment asks for a Python system that reads an English software-module de
 | `use_llm_for_code` | Met | Configured in TOML. |
 | `use_llm_for_tests` | Met | Configured in TOML. |
 
+## PDF Extraction Extensions
+
+| Capability | Status | Implementation |
+|---|---|---|
+| Native text PDFs | Met | `pdftotext` with optional `pypdf` fallback. |
+| Scanned/image-only PDFs | Met when tools are installed | Optional OCR layer uses `pdftoppm` to render pages and `tesseract` to extract text. |
+| Diagram/screenshot/table understanding | Met as opt-in LLM feature | `config.vision.example.toml` renders PDF pages and asks a configured OpenAI or Anthropic vision model for software-requirement notes. |
+| Image-to-Word extraction | Not in scope | The assignment does not request Word generation or image-to-Word conversion. |
+
 ## Known Non-Goals And Limitations
 
-- The system does not perform OCR for scanned/image-only PDFs.
+- OCR requires Poppler and Tesseract command line tools.
+- Visual diagram understanding requires a configured vision-capable LLM provider and is intentionally opt-in because it can increase latency and cost.
 - The system does not convert images to Word documents.
 - Generated code is executed in a local subprocess, not a hardened sandbox.
 - Semantic correctness is bounded by extracted requirements and generated tests; production use would need stronger independent review or reference-test generation.

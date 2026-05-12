@@ -60,7 +60,11 @@ def run_pipeline(pdf_path: str | Path, config: AppConfig) -> RunSummary:
     database.init_schema()
     try:
         llm_client = LLMClient(config.llm)
-        description = extract_description(pdf_path)
+        description = extract_description(
+            pdf_path,
+            extraction_config=config.extraction,
+            llm_config=config.llm,
+        )
         description_id = database.insert_description(
             description.pdf_path,
             description.text_hash,
@@ -271,8 +275,16 @@ def run_delta(
     database.init_schema()
     try:
         llm_client = LLMClient(config.llm)
-        old_description = extract_description(old_pdf_path)
-        new_description = extract_description(new_pdf_path)
+        old_description = extract_description(
+            old_pdf_path,
+            extraction_config=config.extraction,
+            llm_config=config.llm,
+        )
+        new_description = extract_description(
+            new_pdf_path,
+            extraction_config=config.extraction,
+            llm_config=config.llm,
+        )
         old_id = database.insert_description(
             old_description.pdf_path,
             old_description.text_hash,

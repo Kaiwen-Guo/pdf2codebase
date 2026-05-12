@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+import shutil
 import sqlite3
 
+import pytest
+
+from verifaix_pipeline.config import ExtractionConfig
 from verifaix_pipeline.config import load_config
 from verifaix_pipeline.generators import (
     clean_deltas,
@@ -67,6 +71,24 @@ def test_extract_description_from_pdf():
     description = extract_description(SAMPLE_PDF)
     assert "schedule_tasks" in description.text
     assert len(description.text_hash) == 64
+
+
+def test_extract_description_can_append_ocr_text():
+    if not shutil.which("pdftoppm") or not shutil.which("tesseract"):
+        pytest.skip("OCR command line tools are not installed")
+    extraction = ExtractionConfig(
+        use_ocr=True,
+        ocr_mode="always",
+        min_text_chars=200,
+        ocr_dpi=200,
+        use_vision_for_images=False,
+        vision_mode="auto",
+        max_vision_pages=4,
+        vision_dpi=150,
+    )
+    description = extract_description(SAMPLE_PDF, extraction_config=extraction)
+    assert "[OCR EXTRACTED TEXT]" in description.text
+    assert "schedule_tasks" in description.text
 
 
 def test_deterministic_plan_has_traceable_items():

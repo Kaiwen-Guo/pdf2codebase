@@ -1,7 +1,7 @@
 [llm]
-llm_provider = "anthropic"
-model_name = "claude-3-5-haiku-latest"
-api_key_env = "ANTHROPIC_API_KEY"
+llm_provider = "openai"
+model_name = "gpt-4.1-mini"
+api_key_env = "OPENAI_API_KEY"
 temperature = 0.1
 max_tokens = 8192
 use_llm_for_testplan = true
@@ -9,16 +9,16 @@ use_llm_for_code = true
 use_llm_for_tests = true
 
 [storage]
-database_path = "verifaix.anthropic.db"
+database_path = "verifaix.vision.db"
 artifacts_dir = "artifacts"
 
 [extraction]
 use_ocr = true
-ocr_mode = "auto"
+ocr_mode = "always"
 min_text_chars = 200
 ocr_dpi = 200
-use_vision_for_images = false
-vision_mode = "auto"
+use_vision_for_images = true
+vision_mode = "always"
 max_vision_pages = 4
 vision_dpi = 150
 

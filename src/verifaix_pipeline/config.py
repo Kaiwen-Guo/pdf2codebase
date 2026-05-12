@@ -24,6 +24,18 @@ class StorageConfig:
 
 
 @dataclass(frozen=True)
+class ExtractionConfig:
+    use_ocr: bool
+    ocr_mode: str
+    min_text_chars: int
+    ocr_dpi: int
+    use_vision_for_images: bool
+    vision_mode: str
+    max_vision_pages: int
+    vision_dpi: int
+
+
+@dataclass(frozen=True)
 class RuntimeConfig:
     module_name: str
     fallback_to_deterministic: bool
@@ -33,6 +45,7 @@ class RuntimeConfig:
 class AppConfig:
     llm: LLMConfig
     storage: StorageConfig
+    extraction: ExtractionConfig
     runtime: RuntimeConfig
 
 
@@ -43,6 +56,7 @@ def load_config(path: str | Path) -> AppConfig:
 
     llm_raw = raw.get("llm", {})
     storage_raw = raw.get("storage", {})
+    extraction_raw = raw.get("extraction", {})
     runtime_raw = raw.get("runtime", {})
 
     base_dir = config_path.parent
@@ -56,6 +70,13 @@ def load_config(path: str | Path) -> AppConfig:
     provider = str(llm_raw.get("llm_provider", "none")).lower()
     if provider not in {"none", "openai", "anthropic"}:
         raise ValueError(f"Unsupported llm_provider: {provider}")
+
+    ocr_mode = str(extraction_raw.get("ocr_mode", "auto")).lower()
+    if ocr_mode not in {"auto", "always", "never"}:
+        raise ValueError(f"Unsupported ocr_mode: {ocr_mode}")
+    vision_mode = str(extraction_raw.get("vision_mode", "auto")).lower()
+    if vision_mode not in {"auto", "always", "never"}:
+        raise ValueError(f"Unsupported vision_mode: {vision_mode}")
 
     return AppConfig(
         llm=LLMConfig(
@@ -71,6 +92,18 @@ def load_config(path: str | Path) -> AppConfig:
         storage=StorageConfig(
             database_path=database_path,
             artifacts_dir=artifacts_dir,
+        ),
+        extraction=ExtractionConfig(
+            use_ocr=bool(extraction_raw.get("use_ocr", False)),
+            ocr_mode=ocr_mode,
+            min_text_chars=int(extraction_raw.get("min_text_chars", 200)),
+            ocr_dpi=int(extraction_raw.get("ocr_dpi", 200)),
+            use_vision_for_images=bool(
+                extraction_raw.get("use_vision_for_images", False)
+            ),
+            vision_mode=vision_mode,
+            max_vision_pages=int(extraction_raw.get("max_vision_pages", 4)),
+            vision_dpi=int(extraction_raw.get("vision_dpi", 150)),
         ),
         runtime=RuntimeConfig(
             module_name=str(runtime_raw.get("module_name", "generated_module")),

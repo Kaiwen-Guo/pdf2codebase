@@ -12,6 +12,16 @@ use_llm_for_tests = true
 database_path = "verifaix.live.db"
 artifacts_dir = "artifacts"
 
+[extraction]
+use_ocr = true
+ocr_mode = "auto"
+min_text_chars = 200
+ocr_dpi = 200
+use_vision_for_images = false
+vision_mode = "auto"
+max_vision_pages = 4
+vision_dpi = 150
+
 [runtime]
 module_name = "generated_module"
 fallback_to_deterministic = false

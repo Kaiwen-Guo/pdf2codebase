@@ -21,10 +21,11 @@ python -m pip install -e ".[dev]"
 
 After installation, use the `verifaix` console command.
 
-PDF extraction uses the `pdftotext` command when available. On macOS:
+PDF extraction uses the `pdftotext` command when available. OCR for scanned/image-only PDFs uses `pdftoppm` and `tesseract` when enabled. On macOS:
 
 ```bash
 brew install poppler
+brew install tesseract
 ```
 
 For live LLM generation, set an OpenAI API key:
@@ -57,11 +58,13 @@ export OPENAI_API_KEY=...
 verifaix run --pdf examples/scheduler.pdf --config config.live.toml
 ```
 
+For scanned PDFs or visual/diagram-heavy PDFs, use the extraction settings in `config.vision.example.toml`. OCR can run without an LLM; visual diagram summaries require a configured vision-capable provider key.
+
 ## Architecture
 
 The pipeline has eight stages:
 
-1. Extract text from a PDF using `pdftotext` when available, with an optional `pypdf` fallback.
+1. Extract text from a PDF using `pdftotext` when available, with an optional `pypdf` fallback; scanned PDFs can use an OCR layer, and diagram-heavy PDFs can use an opt-in vision-summary layer.
 2. Normalize and hash the extracted description.
 3. Generate `project_spec.json` with public APIs, `REQ_*` requirements, constraints, and module name.
 4. Generate `test_plan.json` with `TP_*` items linked to requirement IDs and source sections.
@@ -155,6 +158,12 @@ Delta does not convert a PDF into another PDF. It compares two versions of the d
 - `use_llm_for_tests`
 
 `config.anthropic.example.toml` demonstrates the same interface for Anthropic. `config.local.toml` disables LLM calls and uses the deterministic scheduler fallback. That fallback is intentionally scoped to the sample problem; hidden PDFs should use the configured LLM path. `config.live.toml` disables fallback so live LLM failures are visible.
+
+The `[extraction]` section controls PDF handling:
+
+- `use_ocr`, `ocr_mode`, `ocr_dpi`: scanned/image-only PDF text extraction through Poppler + Tesseract.
+- `use_vision_for_images`, `vision_mode`, `max_vision_pages`, `vision_dpi`: optional rendered-page vision summaries for diagrams, screenshots, tables, and flowcharts.
+- `min_text_chars`: threshold for `auto` OCR/vision mode.
 
 ## Database Content
 
